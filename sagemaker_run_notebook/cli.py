@@ -366,9 +366,7 @@ def cli_argparser():
     listrun_parser.add_argument(
         "--rule", help="List only runs started by the specified schedule rule"
     )
-    listrun_parser.add_argument(
-        "--notebook", help="List only runs of the specified notebook"
-    )
+    listrun_parser.add_argument("--notebook", help="List only runs of the specified notebook")
     listrun_parser.add_argument(
         "--max", help="Maximum number of runs to show", type=int, default=9999999
     )
@@ -381,9 +379,7 @@ def cli_argparser():
     schedule_parser.add_argument(
         "notebook", help="The name of the notebook to run (local file or an s3 URL)"
     )
-    schedule_parser.add_argument(
-        "--name", help="The name of the rule to create.", required=True
-    )
+    schedule_parser.add_argument("--name", help="The name of the rule to create.", required=True)
     schedule_parser.add_argument(
         "-p",
         action="append",
@@ -421,9 +417,7 @@ def cli_argparser():
         "--at",
         help="When to run the notebook (see https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html for syntax)",
     )
-    schedule_parser.add_argument(
-        "--event", help="Event that will trigger the notebook run"
-    )
+    schedule_parser.add_argument("--event", help="Event that will trigger the notebook run")
     schedule_parser.set_defaults(func=schedule)
 
     unschedule_parser = subparsers.add_parser(
@@ -438,17 +432,13 @@ def cli_argparser():
     listrules_parser.add_argument(
         "--prefix", help="List only rules where the rule name has the specified prefix"
     )
-    listrules_parser.add_argument(
-        "--notebook", help="List only rules with the specified notebook"
-    )
+    listrules_parser.add_argument("--notebook", help="List only rules with the specified notebook")
     listrules_parser.add_argument(
         "--max", help="Maximum number of rules to show", type=int, default=9999999
     )
     listrules_parser.set_defaults(func=list_rules)
 
-    local_parser = subparsers.add_parser(
-        "local", help="Run a notebook locally using Docker"
-    )
+    local_parser = subparsers.add_parser("local", help="Run a notebook locally using Docker")
     local_parser.add_argument("notebook", help="The name of the notebook file to run")
     local_parser.add_argument(
         "-p",

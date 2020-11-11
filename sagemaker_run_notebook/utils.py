@@ -91,8 +91,7 @@ def _create_s3_bucket_if_it_does_not_exist(bucket_name, region, session):
             if error_code == "BucketAlreadyOwnedByYou":
                 pass
             elif (
-                error_code == "OperationAborted"
-                and "conflicting conditional operation" in message
+                error_code == "OperationAborted" and "conflicting conditional operation" in message
             ):
                 # If this bucket is already being concurrently created, we don't need to create
                 # it again.
@@ -154,9 +153,7 @@ def get_execution_role(session):
         )
         return role
 
-    role = re.sub(
-        r"^(.+)sts::(\d+):assumed-role/(.+?)/.*$", r"\1iam::\2:role/\3", assumed_role
-    )
+    role = re.sub(r"^(.+)sts::(\d+):assumed-role/(.+?)/.*$", r"\1iam::\2:role/\3", assumed_role)
 
     # Call IAM to get the role's path
     role_name = role[role.rfind("/") + 1 :]

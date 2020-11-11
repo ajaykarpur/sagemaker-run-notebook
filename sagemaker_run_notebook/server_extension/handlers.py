@@ -61,9 +61,7 @@ class BaseHandler(APIHandler):
         if self.request.headers["Content-Type"] != "application/json":
             self.set_status(
                 400,
-                "Bad Content-Type header: value: '{}'".format(
-                    self.request.headers["Content-Type"]
-                ),
+                "Bad Content-Type header: value: '{}'".format(self.request.headers["Content-Type"]),
             )
             self.set_header("Content-Type", "text/plain")
             self.finish("This server only accepts POST requests in 'application/json'")
@@ -87,9 +85,7 @@ class BaseHandler(APIHandler):
                 self.set_status(400, "Missing parameter: '{}'".format(param))
                 self.set_header("Content-Type", "text/plain")
                 self.finish(
-                    "The parameter '{}' must be supplied with this POST request".format(
-                        param
-                    )
+                    "The parameter '{}' must be supplied with this POST request".format(param)
                 )
                 return False
         return True

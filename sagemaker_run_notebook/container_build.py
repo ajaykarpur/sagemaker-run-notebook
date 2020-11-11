@@ -204,9 +204,7 @@ def logs_for_build(
 
     job_already_completed = False if status == "IN_PROGRESS" else True
 
-    state = (
-        LogState.STARTING if wait and not job_already_completed else LogState.COMPLETE
-    )
+    state = LogState.STARTING if wait and not job_already_completed else LogState.COMPLETE
     dot = True
 
     while state == LogState.STARTING and log_group == None:
@@ -301,12 +299,8 @@ def delete_zip_file(bucket, key):
     s3.delete_object(Bucket=bucket, Key=key)
 
 
-def create_container(
-    repo_name, role, bucket, base, requirements, script, kernel, log=True
-):
-    container_dir = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "container"
-    )
+def create_container(repo_name, role, bucket, base, requirements, script, kernel, log=True):
+    container_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "container")
     with tempfile.TemporaryDirectory() as td:
         dest_dir = os.path.join(td, "container")
         shutil.copytree(container_dir, dest_dir)

@@ -48,15 +48,12 @@ def get_cluster_info(cluster_name, session=None):
         else:
             marker_args = {}
         list_results = emr.list_clusters(
-            ClusterStates=["STARTING", "BOOTSTRAPPING", "RUNNING", "WAITING"],
-            **marker_args
+            ClusterStates=["STARTING", "BOOTSTRAPPING", "RUNNING", "WAITING"], **marker_args
         )
         marker = list_results.get("Marker")
         cluster_info = list(
             it.islice(
-                filter(
-                    lambda c: c.get("Name") == cluster_name, list_results["Clusters"]
-                ),
+                filter(lambda c: c.get("Name") == cluster_name, list_results["Clusters"]),
                 1,
             )
         )

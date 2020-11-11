@@ -134,8 +134,7 @@ class bdist_egg_disabled(bdist_egg):
 
     def run(self):
         sys.exit(
-            "Aborting implicit building of eggs. Use `pip install .` "
-            " to install from source."
+            "Aborting implicit building of eggs. Use `pip install .` " " to install from source."
         )
 
 
@@ -361,17 +360,12 @@ def install_npm(
             if not which(npm_cmd[0]):
                 log.error(
                     "`{0}` unavailable.  If you're running this command "
-                    "using sudo, make sure `{0}` is available to sudo".format(
-                        npm_cmd[0]
-                    )
+                    "using sudo, make sure `{0}` is available to sudo".format(npm_cmd[0])
                 )
                 return
 
             if force or is_stale(node_modules, pjoin(node_package, "package.json")):
-                log.info(
-                    "Installing build dependencies with npm.  This may "
-                    "take a while..."
-                )
+                log.info("Installing build dependencies with npm.  This may " "take a while...")
                 run(npm_cmd + ["install"], cwd=node_package)
             if build_dir and source_dir and not force:
                 should_build = is_stale(build_dir, source_dir)

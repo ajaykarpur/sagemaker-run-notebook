@@ -90,9 +90,7 @@ def upload_fileobj(notebook_fileobj, session=None):
     """
 
     session = ensure_session(session)
-    snotebook = "notebook-{}.ipynb".format(
-        time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime())
-    )
+    snotebook = "notebook-{}.ipynb".format(time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime()))
 
     s3 = session.client("s3")
     key = "papermill_input/" + snotebook
@@ -408,9 +406,7 @@ def describe_run(job_name, session=None):
 
     status = desc["ProcessingJobStatus"]
     if status == "Completed":
-        output_prefix = desc["ProcessingOutputConfig"]["Outputs"][0]["S3Output"][
-            "S3Uri"
-        ]
+        output_prefix = desc["ProcessingOutputConfig"]["Outputs"][0]["S3Output"]["S3Uri"]
         notebook_name = os.path.basename(desc["Environment"]["PAPERMILL_OUTPUT"])
         result = "{}/{}".format(output_prefix, notebook_name)
     else:
@@ -549,9 +545,7 @@ class NotebookRunTracker:
             desc["Elapsed"] = new_desc["Elapsed"]
             desc["Result"] = new_desc["Result"]
 
-            if not (
-                new_desc["Status"] == "InProgress" or new_desc["Status"] == "Stopping"
-            ):
+            if not (new_desc["Status"] == "InProgress" or new_desc["Status"] == "Stopping"):
                 if (
                     job in self.in_progress
                 ):  # because of the asyncio it's posssible for us to race here
@@ -610,9 +604,7 @@ def ensure_session(session=None):
 
 code_file = "lambda_function.py"
 lambda_function_name = "RunNotebook"
-lambda_description = (
-    "A function to run Jupyter notebooks using SageMaker processing jobs"
-)
+lambda_description = "A function to run Jupyter notebooks using SageMaker processing jobs"
 
 
 def create_lambda(role=None, session=None):
@@ -620,9 +612,7 @@ def create_lambda(role=None, session=None):
     created = False
 
     if role is None:
-        print(
-            "No role specified, will create a minimal role and policy to execute the lambda"
-        )
+        print("No role specified, will create a minimal role and policy to execute the lambda")
         role = create_lambda_role()
         created = True
         # time.sleep(30) # wait for eventual consistency, we hope
@@ -700,9 +690,7 @@ def create_lambda_role(name="run-notebook", session=None):
         ],
     }
 
-    policy = iam.create_policy(
-        PolicyName=name, PolicyDocument=json.dumps(policy_document)
-    )
+    policy = iam.create_policy(PolicyName=name, PolicyDocument=json.dumps(policy_document))
 
     iam.attach_role_policy(PolicyArn=policy["Policy"]["Arn"], RoleName=name)
 
@@ -959,9 +947,7 @@ def schedule(
 
     account = session.client("sts").get_caller_identity()["Account"]
     region = session.region_name
-    target_arn = "arn:aws:lambda:{}:{}:function:{}".format(
-        region, account, lambda_function_name
-    )
+    target_arn = "arn:aws:lambda:{}:{}:function:{}".format(region, account, lambda_function_name)
 
     result = events.put_targets(
         Rule=prefixed_rule_name,
@@ -983,14 +969,10 @@ def unschedule(rule_name, session=None):
     lambda_ = session.client("lambda")
 
     try:
-        lambda_.remove_permission(
-            FunctionName="RunNotebook", StatementId="EB-{}".format(rule_name)
-        )
+        lambda_.remove_permission(FunctionName="RunNotebook", StatementId="EB-{}".format(rule_name))
     except botocore.exceptions.ClientError as ce:
         message = ce.response.get("Error", {}).get("Message", "Unknown error")
-        if (
-            not "is not found" in message
-        ):  # ignore it if the permission was already deleted
+        if not "is not found" in message:  # ignore it if the permission was already deleted
             raise
 
     events.remove_targets(Rule=prefixed_rule_name, Ids=["Default"])

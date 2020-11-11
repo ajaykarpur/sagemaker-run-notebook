@@ -63,9 +63,7 @@ def run_notebook():
 
         print("Executing {} with output to {}".format(notebook_file, output_notebook))
         print("Notebook params = {}".format(params))
-        papermill.execute_notebook(
-            notebook_file, output_notebook, params, kernel_name="python3"
-        )
+        papermill.execute_notebook(notebook_file, output_notebook, params, kernel_name="python3")
         print("Execution complete")
 
     except Exception as e:

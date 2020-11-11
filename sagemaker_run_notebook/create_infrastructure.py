@@ -18,9 +18,7 @@ import time
 import botocore.exceptions
 import boto3
 
-cfn_template_file = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "cloudformation.yml"
-)
+cfn_template_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cloudformation.yml")
 
 
 def ensure_session(session=None):
@@ -70,9 +68,7 @@ def create_infrastructure(session=None, update=False, wait=True):
             )
     except botocore.exceptions.ClientError as ce:
         if ce.response["Error"]["Code"] == "AlreadyExistsException":
-            print(
-                "The infrastructure has already been created. Use update to update it."
-            )
+            print("The infrastructure has already been created. Use update to update it.")
             return
         elif ce.response["Error"][
             "Code"
