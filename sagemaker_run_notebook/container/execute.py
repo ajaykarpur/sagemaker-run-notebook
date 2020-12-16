@@ -101,7 +101,9 @@ def run_notebook():
         print("Exception during processing: " + str(e) + "\n" + trc, file=sys.stderr)
 
         # A non-zero exit code causes the Processing job to be marked as Failed.
-        os._exit(1)
+        print("Attempting to mark the Processing job as Failed...")
+        sys.exit(1)
+        # os._exit(1)
 
     if not os.path.exists(output_notebook):
         print("No output notebook was generated")
