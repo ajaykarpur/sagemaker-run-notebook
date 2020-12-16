@@ -90,16 +90,15 @@ def run_notebook():
         print("Execution complete")
 
     except Exception as e:
-        trc = traceback.format_exc()
-
-        # Write out an error file. This will be returned as the failureReason in the
+        # Write to an error file. This will be returned as the failureReason in the
         # DescribeProcessingJob result.
-        with open("/opt/ml/processing/output/failure", "w") as failure:
-            failure.write("Exception during processing: " + str(e) + "\n" + trc)
+        with open("/opt/ml/output/message", "w") as failure:
+            failure.write(str(e))
 
-        # # Printing this causes the exception to be in the Processing job logs, as well.
-        # print("Exception during processing: " + str(e) + "\n" + trc, file=sys.stderr)
-        #
+        # Print the stack trace to the Processing job CloudWatch logs.
+        trc = traceback.format_exc()
+        print(trc, file=sys.stderr)
+
         # A non-zero exit code causes the Processing job to be marked as Failed.
         sys.exit(1)
 
