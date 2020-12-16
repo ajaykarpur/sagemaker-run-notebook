@@ -413,7 +413,7 @@ def describe_run(job_name, session=None):
         result = None
 
     if status == "Failed":
-        failure = desc["FailureReason"]
+        failure = desc["ExitMessage"]
     else:
         failure = None
 
