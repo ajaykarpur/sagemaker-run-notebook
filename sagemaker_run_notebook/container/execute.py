@@ -97,11 +97,11 @@ def run_notebook():
         with open(os.path.join("/opt/ml/output/", "failure"), "w") as failure:
             failure.write("Exception during processing: " + str(e) + "\n" + trc)
 
-        # # Printing this causes the exception to be in the Processing job logs, as well.
-        # print("Exception during processing: " + str(e) + "\n" + trc, file=sys.stderr)
-        #
+        # Printing this causes the exception to be in the Processing job logs, as well.
+        print("Exception during processing: " + str(e) + "\n" + trc, file=sys.stderr)
+
         # A non-zero exit code causes the Processing job to be marked as Failed.
-        sys.exit(1)
+        os._exit(1)
 
     if not os.path.exists(output_notebook):
         print("No output notebook was generated")
