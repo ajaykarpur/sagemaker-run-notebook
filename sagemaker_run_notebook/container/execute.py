@@ -90,10 +90,19 @@ def run_notebook():
         print("Execution complete")
 
     except Exception as e:
+        message = str(e)
+
+        if len(message) > 1024:
+            lines = message.splitlines()
+            ellipsis = "\n\n[...]\n\n"
+            error_message = ellipsis + lines[-1]
+            truncated_length = 1024 - len(error_message)
+            message = message[:truncated_length + 1] + error_message
+
         # Write to an error file. This will be returned as the failureReason in the
         # DescribeProcessingJob result.
         with open("/opt/ml/output/message", "w") as failure:
-            failure.write(str(e))
+            failure.write(message)
 
         # Print the stack trace to the Processing job CloudWatch logs.
         trc = traceback.format_exc()
