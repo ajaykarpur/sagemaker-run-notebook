@@ -1,11 +1,12 @@
-ARG BASE_IMAGE="521695447989.dkr.ecr.us-west-2.amazonaws.com/dlami-image:35.0"
+ARG BASE_IMAGE=need_an_image
 FROM $BASE_IMAGE
 
 ENV JUPYTER_ENABLE_LAB yes
 ENV PYTHONUNBUFFERED TRUE
 
 COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install papermill jupyter nteract-scrapbook boto3 requests && pip3 install -r /tmp/requirements.txt
+RUN python3 -m pip install papermill jupyter nteract-scrapbook boto3 requests \
+ && python3 -m pip install -r /tmp/requirements.txt
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PATH="/opt/program:${PATH}"
