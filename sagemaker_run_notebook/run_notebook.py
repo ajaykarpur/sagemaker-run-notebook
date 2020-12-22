@@ -157,7 +157,7 @@ def execute_notebook(
         + timestamp
     )
     input_directory = "/opt/ml/processing/input/"
-    local_input = os.path.join([input_directory, os.path.basename(notebook)])
+    local_input = os.path.join(input_directory, os.path.basename(notebook))
     result = "{}-{}{}".format(nb_name, timestamp, nb_ext)
     local_output = "/opt/ml/processing/output/"
 
