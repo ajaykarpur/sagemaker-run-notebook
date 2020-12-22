@@ -90,18 +90,26 @@ def run_notebook():
         print("Execution complete")
 
     except Exception as e:
-        trc = traceback.format_exc()
+        message = str(e)
 
-        # Write out an error file. This will be returned as the failureReason in the
+        if len(message) > 1024:
+            lines = message.splitlines()
+            ellipsis = "\n\n[...]\n\n"
+            error_message = ellipsis + lines[-1]
+            truncated_length = 1024 - len(error_message)
+            message = message[:truncated_length + 1] + error_message
+
+        # Write to an error file. This will be returned as the failureReason in the
         # DescribeProcessingJob result.
-        with open(os.path.join("/opt/ml/output/", "failure"), "w") as failure:
-            failure.write("Exception during processing: " + str(e) + "\n" + trc)
+        with open("/opt/ml/output/message", "w") as failure:
+            failure.write(message)
 
-        # Printing this causes the exception to be in the training job logs, as well.
-        print("Exception during processing: " + str(e) + "\n" + trc, file=sys.stderr)
+        # Print the stack trace to the Processing job CloudWatch logs.
+        trc = traceback.format_exc()
+        print(trc, file=sys.stderr)
 
-        # A non-zero exit code causes the training job to be marked as Failed.
-        sys.exit(255)
+        # A non-zero exit code causes the Processing job to be marked as Failed.
+        sys.exit(1)
 
     if not os.path.exists(output_notebook):
         print("No output notebook was generated")

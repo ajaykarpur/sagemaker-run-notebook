@@ -236,7 +236,7 @@ def wait_for_complete(job_name, progress=True, sleep_time=10, session=None):
             time.sleep(sleep_time)
     if progress:
         print()
-    return status, desc.get("FailureReason")
+    return status, desc.get("ExitMessage")
 
 
 def download_notebook(job_name, output=".", session=None):
@@ -413,7 +413,7 @@ def describe_run(job_name, session=None):
         result = None
 
     if status == "Failed":
-        failure = desc["FailureReason"]
+        failure = desc["ExitMessage"]
     else:
         failure = None
 

@@ -39,19 +39,19 @@ data_files_spec = [
 ]
 
 
-def runPackLabextension():
-    if (lab_path / "package.json").is_file():
-        try:
-            run(["jlpm", "build:labextension"], cwd=str(lab_path))
-        except CalledProcessError:
-            pass
+# def runPackLabextension():
+#     if (lab_path / "package.json").is_file():
+#         try:
+#             run(["jlpm", "build:labextension"], cwd=str(lab_path))
+#         except CalledProcessError:
+#             pass
 
 
-pack_labext = command_for_func(runPackLabextension)
+# pack_labext = command_for_func(runPackLabextension)
 
-cmdclass = create_cmdclass("pack_labext", data_files_spec=data_files_spec)
-cmdclass["pack_labext"] = pack_labext
-cmdclass.pop("develop")
+# cmdclass = create_cmdclass("pack_labext", data_files_spec=data_files_spec)
+# cmdclass["pack_labext"] = pack_labext
+# cmdclass.pop("develop")
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -66,7 +66,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/awslabs/sagemaker-run-notebook",
-    cmdclass=cmdclass,
+    # cmdclass=cmdclass,
     packages=["sagemaker_run_notebook", "sagemaker_run_notebook.server_extension"],
     license="Apache License 2.0",
     classifiers=[
