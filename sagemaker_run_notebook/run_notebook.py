@@ -77,7 +77,7 @@ def upload_notebook(notebook, session=None):
     prefix = f"papermill_input/{time.strftime('%Y-%m-%d-%H-%M-%S', time.gmtime())}"
 
     directory, nb_filename = os.path.split(notebook)
-    for root, dirs, files in os.walk(directory):
+    for root, dirs, files in os.walk(directory, followlinks=True):
         for filename in files:
             local_path = os.path.join(root, filename)
             relative_path = os.path.relpath(local_path, directory)
