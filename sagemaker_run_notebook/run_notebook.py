@@ -71,9 +71,23 @@ def upload_notebook(notebook, session=None):
     Returns:
       The resulting object name in S3 in URI format.
     """
-    with open(notebook, "rb") as f:
-        return upload_fileobj(f, session)
+    session = ensure_session(session)
+    s3 = session.client("s3")
+    bucket = default_bucket(session)
+    prefix = f"papermill_input/{time.strftime('%Y-%m-%d-%H-%M-%S', time.gmtime())}"
 
+    directory, nb_filename = os.path.split(notebook)
+    for root, dirs, files in os.walk(directory):
+        for filename in files:
+            local_path = os.path.join(root, filename)
+            relative_path = os.path.relpath(local_path, directory)
+            s3_path = os.path.join(prefix, relative_path)
+            try:
+                s3.head_object(Bucket=bucket, Key=s3_path)
+            except:
+                s3.upload_file(local_path, bucket, s3_path)
+
+    return f"s3://{bucket}/{prefix}/"
 
 def upload_fileobj(notebook_fileobj, session=None):
     """Uploads a file object to S3 in the default SageMaker Python SDK bucket for
@@ -143,7 +157,7 @@ def execute_notebook(
         + timestamp
     )
     input_directory = "/opt/ml/processing/input/"
-    local_input = input_directory + os.path.basename(input_path)
+    local_input = os.path.join([input_directory, os.path.basename(notebook)])
     result = "{}-{}{}".format(nb_name, timestamp, nb_ext)
     local_output = "/opt/ml/processing/output/"
 
